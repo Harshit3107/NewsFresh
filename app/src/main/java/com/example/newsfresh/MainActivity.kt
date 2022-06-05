@@ -1,11 +1,10 @@
 package com.example.newsfresh
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
-import android.widget.Button
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
@@ -13,31 +12,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_news.*
 import java.util.*
 
 class MainActivity : AppCompatActivity(), NewsItemClicked {
-
-    private lateinit var mAdapter: NewsListAdapter
+    private val API_KEY: String = BuildConfig.ApiKey
+    private lateinit var mAdapter:NewsListAdapter
+    var url:String = "https://newsapi.org/v2/top-headlines?country=in&apiKey=${API_KEY}"
     private lateinit var mcurr:News
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        fetchdata()
+        fetchData()
         mAdapter = NewsListAdapter(this, this)
         recyclerView.adapter = mAdapter
 
 
     }
 
-    fun fetchdata() {
-        val url =
-            "https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=0a79ebb202ae40dfa52fe5801909a222"
-//        shareB.setOnClickListener{
-//            when(item)
-//                R.id.shareB->{ url = url + "as" }
-//        }
+    fun fetchData() {
 
 
         val jsonObjectRequest = object : JsonObjectRequest(
@@ -89,6 +83,58 @@ class MainActivity : AppCompatActivity(), NewsItemClicked {
 
     }
 
-
-
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.category_menu, menu)
+        return true
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.business -> {
+                titletv.text = getString(R.string.business)
+                url = "https://newsapi.org/v2/top-headlines?country=in&category=business&apiKey=${API_KEY}"
+                fetchData()
+                true
+            }
+            R.id.entertainment -> {
+                titletv.text = getString(R.string.entertainment)
+                url = "https://newsapi.org/v2/top-headlines?country=in&category=entertainment&apiKey=${API_KEY}"
+                fetchData()
+                true
+            }
+            R.id.general -> {
+                titletv.text = getString(R.string.general)
+                url = "https://newsapi.org/v2/top-headlines?country=in&category=general&apiKey=${API_KEY}"
+                fetchData()
+                true
+            }
+            R.id.health -> {
+                titletv.text = getString(R.string.health)
+                url = "https://newsapi.org/v2/top-headlines?country=in&category=health&apiKey=${API_KEY}"
+                fetchData()
+                true
+            }
+            R.id.science -> {
+                titletv.text = getString(R.string.science)
+                url = "https://newsapi.org/v2/top-headlines?country=in&category=science&apiKey=${API_KEY}"
+                fetchData()
+                true
+            }
+            R.id.sports -> {
+                titletv.text = getString(R.string.sports)
+                url = "https://newsapi.org/v2/top-headlines?country=in&category=sports&apiKey=${API_KEY}"
+                fetchData()
+                true
+            }
+            R.id.technology -> {
+                titletv.text = getString(R.string.technology)
+                url = "https://newsapi.org/v2/top-headlines?country=in&category=technology&apiKey=${API_KEY}"
+                fetchData()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
+    }}
